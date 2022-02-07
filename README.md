@@ -1,2 +1,2 @@
 # cs6910_assignment1
-Codes of the Assignment one of the Course CS6910 Deep Learning
+CS6910 Deep Learning Assignment Codes and Files
