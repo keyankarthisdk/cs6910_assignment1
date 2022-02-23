@@ -35,11 +35,64 @@ def Params_Init(layer_sizes, funcs):
 
 
 # @ N Kausik CS21M037
-# TODO: Forward Propogation
+def ForwardPropogation(X, parameters):
+    Ws = parameters["Ws"]
+    bs = parameters["bs"]
+    act_fns = parameters["act_fns"]
+
+    # Initial a = x
+    Os = []
+    As = []
+    a = np.copy(X).T
+    for layer in range(len(Ws)):
+        # o = W a(previous layer) + b
+        Os.append(np.matmul(Ws[layer], a) + bs[layer])
+        # a = activation(o)
+        a = act_fns[layer]["func"](Os[layer])
+        # Save all activations
+        As.append(np.copy(a))
+
+    return a, As, Os
 
 
 # @ N Kausik CS21M037
-# TODO: Backward Propogation
+def BackwardPropogation(X, y, parameters):
+    n_samples = X.shape[0]
+    Ws = parameters["Ws"]
+    bs = parameters["bs"]
+    act_fns = parameters["act_fns"]
+    n_layers = len(Ws)+1
+
+    grads = {
+        "dA": [0]*(n_layers-1),
+        "dW": [0]*(len(Ws)),
+        "db": [0]*(len(bs)),
+    }
+    
+    # Find final activations
+    a, As, Os = ForwardPropogation(X, parameters)
+
+    for layer in reversed(range(n_layers-1)):
+        # Output Layer
+        if layer == n_layers-2:
+            grads["dA"][layer] = parameters["loss_fn"]["deriv"](a, y.T, **parameters["loss_fn"]["params"])
+            # Update Weights
+            grads["dW"][layer] = (1/n_samples) * np.matmul(grads["dA"][layer], As[layer-1].T)
+            # Update Biases
+            grads["db"][layer] = (1/n_samples) * np.sum(grads["dA"][layer], axis=1, keepdims=True)
+        # Hidden Layers
+        else:
+            dA = act_fns[layer]["deriv"](Os[layer])
+            grads["dA"][layer] = np.matmul(Ws[layer+1].T, grads["dA"][layer+1]) * dA
+            # Update Weights
+            if layer == 0: # Input Layer
+                grads["dW"][layer] = (1/n_samples) * np.matmul(grads["dA"][layer], X)
+            else:
+                grads["dW"][layer] = (1/n_samples) * np.matmul(grads["dA"][layer], As[layer-1].T)
+            # Update Biases
+            grads["db"][layer] = (1/n_samples) * np.sum(grads["dA"][layer], axis=1, keepdims=True)
+
+    return grads
 
 
 # @ Karthikeyan S CS21M028
