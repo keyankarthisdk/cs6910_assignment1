@@ -39,3 +39,15 @@ def LossFuncDeriv_CrossEntropy_WithSoftmax(y, t, **params):
     Cross Entropy Derivative
     '''
     return y - t
+
+# Main Vars
+LOSS_FUNCTIONS = {
+    "mse": {
+        "func": LossFunc_MeanSquaredError,
+        "deriv": LossFuncDeriv_MeanSquaredError_WithSoftmax
+    },
+    "cross_entropy": {
+        "func": LossFunc_CrossEntropy,
+        "deriv": LossFuncDeriv_CrossEntropy_WithSoftmax
+    }
+}
