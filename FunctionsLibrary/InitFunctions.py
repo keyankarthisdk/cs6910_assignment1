@@ -4,6 +4,7 @@ Init Functions
 
 # Imports
 import numpy as np
+np.random.seed(0)
 
 # Main Functions
 # Init Functions

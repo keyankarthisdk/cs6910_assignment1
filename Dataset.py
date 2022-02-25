@@ -6,7 +6,7 @@ Dataset Functions
 import math
 import numpy as np
 from tqdm import tqdm
-from keras.datasets import fashion_mnist
+from keras.datasets import fashion_mnist, mnist
 
 # Main Vars
 DATASET_N_CLASSES = 10
@@ -22,9 +22,9 @@ DATASET_FASHION_LABELS = [
     "Bag",
     "Ankle boot"
 ]
+DATASET_MNIST_LABELS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 # Main Functions
-# @ N Kausik CS21M037
 # Encoding Functions
 def OneHotEncoder(y, num_classes=10):
     y = np.array(y)
@@ -35,6 +35,12 @@ def OneHotEncoder(y, num_classes=10):
 # Dataset Load Functions
 def LoadFashionDataset():
     (X_train, Y_train), (X_test, Y_test) = fashion_mnist.load_data()
+    X_train = np.array(X_train) / 255.0
+    X_test = np.array(X_test) / 255.0
+    return X_train, X_test, Y_train, Y_test
+
+def LoadMNISTDataset():
+    (X_train, Y_train), (X_test, Y_test) = mnist.load_data()
     X_train = np.array(X_train) / 255.0
     X_test = np.array(X_test) / 255.0
     return X_train, X_test, Y_train, Y_test

@@ -18,6 +18,7 @@ def Runner_ParseArgs():
 
     parser.add_argument("--mode", "-m", type=str, default="train", help="train or test")
     parser.add_argument("--model", "-ml", type=str, default="models/model_1.p", help="Model path (.json) to use or save to")
+    parser.add_argument("--dataset", "-d", type=str, default="fashion", help="Dataset to use (fashion or mnist)")
 
     parser.add_argument("--epochs", "-e", type=int, default=3, help="Number of epochs to train")
     parser.add_argument("--batch_size", "-b", type=int, default=128, help="Batch size")
@@ -75,7 +76,10 @@ def Runner_Train(args):
     
     # Get Dataset
     # Load Data
-    X_train_full, X_test, Y_train, Y_test = LoadFashionDataset()
+    if args.dataset == "fashion":
+        X_train_full, X_test, Y_train, Y_test = LoadFashionDataset()
+    elif args.dataset == "mnist":
+        X_train_full, X_test, Y_train, Y_test = LoadMNISTDataset()
     # Normalize Data
     X_train_full = NormalizeData(X_train_full, normRange=(0.0, 1.0))
     X_test = NormalizeData(X_test, normRange=(0.0, 1.0))
@@ -226,7 +230,10 @@ def Runner_Test(args):
     TRAINED_PARAMETERS = Model_Load(MODEL_PATH)
     # Get Dataset
     # Load Data
-    X_train, X_test, Y_train, Y_test = LoadFashionDataset()
+    if args.dataset == "fashion":
+        X_train, X_test, Y_train, Y_test = LoadFashionDataset()
+    elif args.dataset == "mnist":
+        X_train, X_test, Y_train, Y_test = LoadMNISTDataset()
     # Normalize Data
     X_train = NormalizeData(X_train, normRange=(0.0, 1.0))
     X_test = NormalizeData(X_test, normRange=(0.0, 1.0))
