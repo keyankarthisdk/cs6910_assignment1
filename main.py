@@ -76,10 +76,13 @@ def Runner_Train(args):
     
     # Get Dataset
     # Load Data
+    LABELS = DATASET_FASHION_LABELS
     if args.dataset == "fashion":
         X_train_full, X_test, Y_train, Y_test = LoadFashionDataset()
+        LABELS = DATASET_FASHION_LABELS
     elif args.dataset == "mnist":
         X_train_full, X_test, Y_train, Y_test = LoadMNISTDataset()
+        LABELS = DATASET_MNIST_LABELS
     # Normalize Data
     X_train_full = NormalizeData(X_train_full, normRange=(0.0, 1.0))
     X_test = NormalizeData(X_test, normRange=(0.0, 1.0))
@@ -213,6 +216,10 @@ def Runner_Train(args):
         wandb.log({
             "loss_test": loss_test,
             "eval_test": eval_test
+        })
+        # Wandb log confusion matrix
+        wandb.log({
+            "confusion_matrix": Wandb_LogConfusionMatrix(Y_test_pred, Y_test, LABELS)
         })
         # Close Wandb Run
         wandb.finish()
