@@ -64,6 +64,12 @@ def ActFuncDeriv_relu(x):
     x[x > 0] = 1.0
     return x
 
+def ActFuncDeriv_softmax(x):
+    '''
+    Softmax Derivative Function
+    '''
+    return np.ones(x.shape)
+
 # Main Vars
 ACTIVATION_FUNCTIONS = {
     "sigmoid": {
@@ -80,6 +86,6 @@ ACTIVATION_FUNCTIONS = {
     },
     "softmax": {
         "func": ActFunc_softmax,
-        "deriv": None
+        "deriv": ActFuncDeriv_softmax
     }
 }
